@@ -1,33 +1,28 @@
 # PLC Motor Start/Stop Control — CODESYS Ladder Logic
 
 ## Project Overview
-This project demonstrates a PLC-based motor start/stop control system built in **CODESYS V3.5** using **Ladder Diagram (LD)**. The control logic includes a standard motor seal-in circuit, stop control, emergency-stop permissive logic, overload protection, and live runtime validation using **CODESYS Control Win V3 x64**.
+This project demonstrates a PLC-based motor start/stop control system built in **CODESYS V3.5 SP22** using **IEC 61131-3 Ladder Diagram (LD)**. The logic includes start/stop control, a motor seal-in circuit, simulated emergency-stop and overload permissives, task configuration, and live validation using **CODESYS Control Win V3 x64**.
+
+> **Safety note:** `E_Stop_OK` and `Overload_OK` are simulated Boolean permissives for educational and runtime testing. A real emergency-stop function requires appropriate safety-rated hardware, circuits, and/or a safety controller.
 
 ## Key Features
 - Start pushbutton control
 - Stop pushbutton control
 - Motor seal-in / holding circuit
-- Emergency-stop permissive
-- Overload permissive
-- Motor run coil
-- Online monitoring and live testing
-- Soft-PLC runtime validation
-
-## Software / Technologies
-- CODESYS V3.5 SP22
-- CODESYS Control Win V3 x64
-- IEC 61131-3 Ladder Diagram (LD)
-- Boolean PLC logic
+- E-stop permissive logic
+- Overload permissive logic
 - Online variable monitoring
+- Soft-PLC runtime testing
+- Functional validation of start, latch, stop, E-stop, and overload behavior
 
 ## PLC Variables
 
 | Variable | Type | Initial Value | Purpose |
 |---|---|---:|---|
-| `Start_PB` | BOOL | FALSE | Motor start pushbutton |
-| `Stop_PB` | BOOL | FALSE | Motor stop pushbutton |
-| `E_Stop_OK` | BOOL | TRUE | Emergency-stop permissive |
-| `Overload_OK` | BOOL | TRUE | Overload permissive |
+| `Start_PB` | BOOL | FALSE | Motor start command |
+| `Stop_PB` | BOOL | FALSE | Motor stop command |
+| `E_Stop_OK` | BOOL | TRUE | Simulated E-stop permissive |
+| `Overload_OK` | BOOL | TRUE | Simulated overload permissive |
 | `Motor_Run` | BOOL | FALSE | Motor run command/output |
 
 ## Ladder Logic
@@ -39,7 +34,7 @@ This project demonstrates a PLC-based motor start/stop control system built in *
                                            +----| | Motor_Run ---+
 ```
 
-Pressing `Start_PB` energizes `Motor_Run`. The parallel `Motor_Run` contact creates the seal-in path so the motor stays energized after Start is released. Pressing Stop, removing `E_Stop_OK`, or removing `Overload_OK` de-energizes the motor.
+Pressing `Start_PB` energizes `Motor_Run`. The parallel `Motor_Run` contact creates the seal-in path so the motor remains energized after Start is released. Pressing Stop, removing `E_Stop_OK`, or removing `Overload_OK` de-energizes the motor command.
 
 ## Functional Test Results
 
@@ -52,89 +47,79 @@ Pressing `Start_PB` energizes `Motor_Run`. The parallel `Motor_Run` contact crea
 | E-stop permissive removed | `Motor_Run = FALSE` | PASS |
 | Overload permissive removed | `Motor_Run = FALSE` | PASS |
 
+Full results: [docs/test-results.md](docs/test-results.md)
+
 ## Screenshots
 
 ### 1. Complete Ladder Logic
-![Complete Ladder Logic](images/01-complete-ladder-logic.png)
+![Complete Ladder Logic](01-complete-ladder-logic.png)
 
 ### 2. Project / Task Configuration
-![Task Configuration](images/02-task-configuration.png)
+![Task Configuration](02-task-configuration.png)
 
 ### 3. Successful Build
-![Successful Build](images/03-build-zero-errors.png)
+![Successful Build](03-build-zero-errors.png)
 
 ### 4. PLC Runtime Connected
-![PLC Runtime Connected](images/04-plc-runtime-connected.png)
+![PLC Runtime Connected](04-plc-runtime-connected.png)
 
 ### 5. Motor Running Online
-![Motor Running](images/05-motor-running.png)
+![Motor Running](05-motor-running.png)
 
 ### 6. Seal-In / Latch Test
-![Seal-In Test](images/06-seal-in-latch.png)
+![Seal-In Test](06-seal-in-latch.png)
 
-### 7. E-Stop Safety Test
-![E-Stop Safety Test](images/07-estop-safety-test.png)
+### 7. E-Stop Permissive Test
+![E-Stop Permissive Test](07-estop-safety-test.png)
 
-### 8. Overload Safety Test
-![Overload Safety Test](images/08-overload-safety-test.png)
-
-## What I Learned
-- PLC scan-cycle based control logic
-- Ladder Diagram programming
-- Normally open vs. normally closed logic
-- Motor starter seal-in circuits
-- Safety permissives and overload logic
-- PLC task configuration
-- CODESYS device communication
-- Soft-PLC runtime setup
-- Online monitoring and troubleshooting
-- Functional verification of control logic
+### 8. Overload Permissive Test
+![Overload Permissive Test](08-overload-safety-test.png)
 
 ## Troubleshooting Performed
-- Configured the Ladder Diagram editor and Toolbox
-- Corrected Ladder contact operand errors
-- Built a proper parallel seal-in branch
+- Corrected Ladder contact operand syntax errors
+- Built the parallel motor seal-in branch
 - Assigned `Motor_Control` to `MainTask`
 - Resolved Gateway vs. Control Win runtime connectivity
 - Started and connected the CODESYS Control Win x64 soft PLC
-- Established the active device path
-- Configured device-user access
+- Established the active device path and device-user access
 - Verified live variables and wrote test values online
 
-## Possible Future Enhancements
-- Motor-running indicator
-- Fault indicator
-- Fault reset pushbutton
-- TON start delay
-- Runtime counter
-- HMI start/stop interface
-- VFD run command and speed reference
-- Simulated field I/O
-- Auto/manual modes
+## Skills Demonstrated
+- PLC programming with Ladder Diagram
+- Boolean control logic
+- Motor starter seal-in circuits
+- Permissive/interlock logic
+- PLC task configuration
+- Soft-PLC runtime setup
+- Online monitoring and troubleshooting
+- Functional verification and documentation
+
+## CODESYS Project File
+The original project file is included in this repository:
+
+[`Motor_Control_Project.project`](Motor_Control_Project.project)
 
 ## Resume Project Entry
 **PLC Motor Start/Stop Control — CODESYS**
 - Developed and tested a PLC-based motor control application using IEC 61131-3 Ladder Logic in CODESYS.
-- Implemented start/stop control, motor seal-in logic, emergency-stop permissive, and overload protection.
+- Implemented start/stop control, motor seal-in logic, simulated E-stop permissive, and overload permissive logic.
 - Configured the application task and CODESYS Control Win x64 soft PLC for online simulation and testing.
-- Validated normal operation, stop conditions, E-stop response, overload response, and motor latch behavior through live variable monitoring.
+- Validated start, seal-in, stop, E-stop permissive, and overload permissive behavior through live variable monitoring.
 
 ## Repository Structure
 
 ```text
 PLC-Motor-Control-CODESYS/
 ├── README.md
-├── project/
-│   └── Motor_Control_Project.project
-├── images/
-│   ├── 01-complete-ladder-logic.png
-│   ├── 02-task-configuration.png
-│   ├── 03-build-zero-errors.png
-│   ├── 04-plc-runtime-connected.png
-│   ├── 05-motor-running.png
-│   ├── 06-seal-in-latch.png
-│   ├── 07-estop-safety-test.png
-│   └── 08-overload-safety-test.png
+├── Motor_Control_Project.project
+├── 01-complete-ladder-logic.png
+├── 02-task-configuration.png
+├── 03-build-zero-errors.png
+├── 04-plc-runtime-connected.png
+├── 05-motor-running.png
+├── 06-seal-in-latch.png
+├── 07-estop-safety-test.png
+├── 08-overload-safety-test.png
 └── docs/
     └── test-results.md
 ```
